@@ -1,10 +1,13 @@
-
 import React from 'react';
 import SectionCard from './shared/SectionCard';
 
-const LinkAndButtonSection: React.FC = () => {
+interface SectionProps {
+  id: string;
+}
+
+const LinkAndButtonSection: React.FC<SectionProps> = ({ id }) => {
   return (
-    <SectionCard title="Liên kết và Nút mô tả">
+    <SectionCard title="Liên kết và Nút mô tả" id={id}>
       <p>
         Văn bản của các liên kết và nút phải có ý nghĩa khi đọc một mình, ngoài ngữ cảnh. Điều này giúp người dùng trình đọc màn hình hiểu được hành động sẽ xảy ra khi họ kích hoạt nó.
       </p>

@@ -1,10 +1,13 @@
-
 import React from 'react';
 import SectionCard from './shared/SectionCard';
 
-const ImageAccessibilitySection: React.FC = () => {
+interface SectionProps {
+  id: string;
+}
+
+const ImageAccessibilitySection: React.FC<SectionProps> = ({ id }) => {
   return (
-    <SectionCard title="Tiếp cận Hình ảnh với Văn bản thay thế (Alt Text)">
+    <SectionCard title="Tiếp cận Hình ảnh với Văn bản thay thế (Alt Text)" id={id}>
       <p>
         Mọi hình ảnh truyền tải thông tin đều phải có thuộc tính <code>alt</code> mô tả nội dung của hình ảnh. Nếu một hình ảnh chỉ mang tính trang trí, nó nên có thuộc tính <code>alt</code> rỗng (<code>alt=""</code>) để trình đọc màn hình bỏ qua.
       </p>

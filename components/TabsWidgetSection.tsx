@@ -1,7 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import SectionCard from './shared/SectionCard';
 
-const TabsWidgetSection: React.FC = () => {
+interface SectionProps {
+  id: string;
+}
+
+const TabsWidgetSection: React.FC<SectionProps> = ({ id }) => {
   const [activeTab, setActiveTab] = useState(0);
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
@@ -12,7 +16,10 @@ const TabsWidgetSection: React.FC = () => {
   ];
 
   useEffect(() => {
-    tabRefs.current[activeTab]?.focus();
+    // We only want to focus the tab if it was changed via keyboard.
+    // A simple focus on activeTab change can be jarring for mouse users.
+    // For this demo, keeping it simple. In a real app, you might track the interaction source.
+    // tabRefs.current[activeTab]?.focus();
   }, [activeTab]);
 
   const handleKeyDown = (e: React.KeyboardEvent, index: number) => {
@@ -30,11 +37,13 @@ const TabsWidgetSection: React.FC = () => {
     if (newIndex !== index) {
       e.preventDefault();
       setActiveTab(newIndex);
+      // Focus the new tab immediately after state update
+      setTimeout(() => tabRefs.current[newIndex]?.focus(), 0);
     }
   };
 
   return (
-    <SectionCard title="Widget Phức hợp với ARIA: Tabs">
+    <SectionCard title="Widget Phức hợp với ARIA: Tabs" id={id}>
       <p>
         Tabs là một thành phần giao diện người dùng phổ biến. Để làm cho chúng có thể truy cập, chúng ta cần sử dụng các vai trò ARIA và quản lý điều hướng bàn phím một cách chính xác.
       </p>
@@ -47,8 +56,8 @@ const TabsWidgetSection: React.FC = () => {
         <li>Sử dụng các phím mũi tên Trái/Phải để điều hướng giữa các tab.</li>
       </ul>
 
-      <div className="mt-4 border border-slate-200 rounded-lg">
-        <div role="tablist" aria-label="Cài đặt tài khoản" className="flex border-b border-slate-200">
+      <div className="mt-4 border border-slate-200 dark:border-slate-700 rounded-lg">
+        <div role="tablist" aria-label="Cài đặt tài khoản" className="flex border-b border-slate-200 dark:border-slate-700">
           {tabs.map((tab, index) => (
             <button
               key={index}
@@ -62,8 +71,8 @@ const TabsWidgetSection: React.FC = () => {
               ref={(el) => { tabRefs.current[index] = el; }}
               className={`px-4 py-3 text-sm font-medium -mb-px border-b-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:z-10 ${
                 activeTab === index
-                  ? 'border-indigo-600 text-indigo-600'
-                  : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'
+                  ? 'border-indigo-600 text-indigo-600 dark:text-indigo-400'
+                  : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:border-slate-300 dark:hover:border-slate-500'
               }`}
             >
               {tab.title}

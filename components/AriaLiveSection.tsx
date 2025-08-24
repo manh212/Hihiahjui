@@ -1,66 +1,70 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import SectionCard from './shared/SectionCard';
 
-const AriaLiveSection: React.FC = () => {
-  const [message, setMessage] = useState('');
-  const [messageType, setMessageType] = useState<'success' | 'error' | null>(null);
+interface SectionProps {
+  id: string;
+}
 
-  useEffect(() => {
-    if (message) {
-      const timer = setTimeout(() => {
-        setMessage('');
-        setMessageType(null);
-      }, 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [message]);
+const AriaLiveSection: React.FC<SectionProps> = ({ id }) => {
+  const [politeMessage, setPoliteMessage] = useState('');
+  const [assertiveMessage, setAssertiveMessage] = useState('');
 
-  const handleSuccess = () => {
-    setMessageType('success');
-    setMessage('Hành động đã được thực hiện thành công!');
+  const handlePoliteUpdate = () => {
+    setPoliteMessage(`Thông báo lịch sự được cập nhật lúc: ${new Date().toLocaleTimeString()}`);
+    setTimeout(() => setPoliteMessage(''), 5000);
   };
 
-  const handleError = () => {
-    setMessageType('error');
-    setMessage('Đã xảy ra lỗi. Vui lòng thử lại.');
+  const handleAssertiveUpdate = () => {
+    setAssertiveMessage(`Cảnh báo khẩn cấp! Cập nhật lúc: ${new Date().toLocaleTimeString()}`);
+    setTimeout(() => setAssertiveMessage(''), 5000);
   };
   
-  const getBackgroundColor = () => {
-    if (messageType === 'success') return 'bg-green-100 border-green-400 text-green-800';
-    if (messageType === 'error') return 'bg-red-100 border-red-400 text-red-800';
-    return '';
-  };
-
-
   return (
-    <SectionCard title="Khu vực Động (Live Regions) với ARIA">
+    <SectionCard title="Khu vực Động (Live Regions) với ARIA" id={id}>
       <p>
-        <code>aria-live="polite"</code> được sử dụng để thông báo cho người dùng trình đọc màn hình về các cập nhật nội dung không quan trọng mà không làm gián đoạn công việc hiện tại của họ (ví dụ: thông báo xác nhận).
-        Trình đọc màn hình sẽ đọc nội dung của vùng này khi nó thay đổi.
+        Khu vực động thông báo cho người dùng trình đọc màn hình về các thay đổi nội dung mà không cần di chuyển tiêu điểm của họ.
       </p>
 
-      <div className="mt-4 space-x-4">
-        <button 
-          onClick={handleSuccess}
-          className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
-        >
-          Mô phỏng hành động thành công
-        </button>
-        <button 
-          onClick={handleError}
-          className="px-4 py-2 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-75"
-        >
-          Mô phỏng hành động lỗi
-        </button>
-      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
+        <div>
+          <h3 className="font-semibold text-lg mb-2"><code>aria-live="polite"</code></h3>
+          <p className="mb-4 text-sm">
+            Thông báo cho người dùng khi họ không có hoạt động gì. Thích hợp cho các thông báo không khẩn cấp như "Sản phẩm đã được thêm vào giỏ hàng".
+          </p>
+          <button 
+            onClick={handlePoliteUpdate}
+            className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
+          >
+            Kích hoạt thông báo "Lịch sự"
+          </button>
+          <div 
+            aria-live="polite"
+            role="status"
+            className={`mt-4 p-4 border rounded-lg transition-opacity duration-300 min-h-[70px] ${politeMessage ? 'opacity-100 bg-green-100 border-green-400 text-green-800 dark:bg-green-900/30 dark:border-green-700 dark:text-green-200' : 'opacity-0'}`}
+          >
+            {politeMessage}
+          </div>
+        </div>
 
-      <div 
-        aria-live="polite"
-        role="status"
-        className={`mt-4 p-4 border rounded-lg transition-opacity duration-300 ${message ? `opacity-100 ${getBackgroundColor()}` : 'opacity-0'}`}
-      >
-        {message || 'Thông báo sẽ xuất hiện ở đây.'}
+        <div>
+          <h3 className="font-semibold text-lg mb-2"><code>aria-live="assertive"</code></h3>
+          <p className="mb-4 text-sm">
+            Ngắt lời người dùng để thông báo ngay lập tức. Chỉ sử dụng cho các thông báo quan trọng, khẩn cấp như "Đã xảy ra lỗi nghiêm trọng".
+          </p>
+          <button 
+            onClick={handleAssertiveUpdate}
+            className="px-4 py-2 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-75"
+          >
+            Kích hoạt thông báo "Khẩn cấp"
+          </button>
+          <div 
+            aria-live="assertive"
+            role="alert"
+            className={`mt-4 p-4 border rounded-lg transition-opacity duration-300 min-h-[70px] ${assertiveMessage ? 'opacity-100 bg-red-100 border-red-400 text-red-800 dark:bg-red-900/30 dark:border-red-700 dark:text-red-200' : 'opacity-0'}`}
+          >
+            {assertiveMessage}
+          </div>
+        </div>
       </div>
     </SectionCard>
   );

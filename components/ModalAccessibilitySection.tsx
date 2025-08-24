@@ -1,11 +1,15 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import SectionCard from './shared/SectionCard';
 
-const ModalAccessibilitySection: React.FC = () => {
+interface SectionProps {
+  id: string;
+}
+
+const ModalAccessibilitySection: React.FC<SectionProps> = ({ id }) => {
   const [isOpen, setIsOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
 
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
@@ -17,10 +21,12 @@ const ModalAccessibilitySection: React.FC = () => {
       const focusableElements = modalRef.current?.querySelectorAll<HTMLElement>(
         'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
       );
+      
       const firstElement = focusableElements?.[0];
       const lastElement = focusableElements?.[focusableElements.length - 1];
 
-      firstElement?.focus();
+      // Focus the title for immediate context
+      titleRef.current?.focus();
 
       const handleKeyDown = (e: KeyboardEvent) => {
         if (e.key === 'Escape') {
@@ -52,13 +58,14 @@ const ModalAccessibilitySection: React.FC = () => {
   }, [isOpen]);
 
   return (
-    <SectionCard title="Modal (Dialog) có thể truy cập">
+    <SectionCard title="Modal (Dialog) có thể truy cập" id={id}>
       <p>
         Các hộp thoại modal đặt ra nhiều thách thức về khả năng truy cập. Một modal có thể truy cập cần:
       </p>
       <ul className="list-disc list-inside space-y-1 pl-4 my-2">
         <li>Có vai trò ARIA là <code>dialog</code> và <code>aria-modal="true"</code>.</li>
         <li>Được đặt tên bằng <code>aria-labelledby</code>.</li>
+        <li><strong>Cập nhật:</strong> Đặt tiêu điểm vào tiêu đề của modal khi mở để cung cấp ngữ cảnh ngay lập tức.</li>
         <li>"Bẫy" tiêu điểm bàn phím bên trong nó khi nó đang mở.</li>
         <li>Có thể được đóng bằng phím <code>Escape</code>.</li>
         <li>Trả lại tiêu điểm cho phần tử đã kích hoạt nó khi đóng.</li>
@@ -75,7 +82,7 @@ const ModalAccessibilitySection: React.FC = () => {
 
       {isOpen && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75"
           onClick={closeModal}
         >
           <div
@@ -83,24 +90,29 @@ const ModalAccessibilitySection: React.FC = () => {
             role="dialog"
             aria-modal="true"
             aria-labelledby="modal-title"
-            className="bg-white rounded-lg shadow-xl p-6 sm:p-8 max-w-md w-full mx-4"
+            className="bg-white dark:bg-slate-800 rounded-lg shadow-xl p-6 sm:p-8 max-w-md w-full mx-4"
             onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside modal
           >
             <div className="flex justify-between items-start">
-              <h2 id="modal-title" className="text-xl font-bold text-slate-900">
+              <h2 
+                id="modal-title" 
+                ref={titleRef}
+                tabIndex={-1}
+                className="text-xl font-bold text-slate-900 dark:text-slate-100 focus:outline-none"
+              >
                 Điều khoản Dịch vụ
               </h2>
               <button 
                 onClick={closeModal} 
                 aria-label="Đóng modal"
-                className="p-1 rounded-full text-slate-500 hover:bg-slate-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="p-1 rounded-full text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
                 <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
-            <p className="mt-4 text-slate-600">
+            <p className="mt-4 text-slate-600 dark:text-slate-300">
               Bằng cách tiếp tục, bạn đồng ý với các điều khoản và điều kiện của chúng tôi. Vui lòng đọc kỹ trước khi tiến hành.
             </p>
             <div className="mt-6 flex justify-end">

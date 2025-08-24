@@ -1,9 +1,13 @@
 import React from 'react';
 import SectionCard from './shared/SectionCard';
 
-const LandmarksSection: React.FC = () => {
+interface SectionProps {
+  id: string;
+}
+
+const LandmarksSection: React.FC<SectionProps> = ({ id }) => {
   return (
-    <SectionCard title="Vùng ARIA (Landmarks)">
+    <SectionCard title="Vùng ARIA (Landmarks)" id={id}>
       <p>
         Các vùng ARIA (Landmarks) giúp xác định các khu vực của một trang, cho phép người dùng trình đọc màn hình dễ dàng hiểu được bố cục và điều hướng trực tiếp đến các phần cụ thể.
       </p>
@@ -21,22 +25,22 @@ const LandmarksSection: React.FC = () => {
         <li><code>role="region"</code>: Một vùng chung cần được đặt tên có thể truy cập bằng cách sử dụng <code>aria-label</code> hoặc <code>aria-labelledby</code>.</li>
       </ul>
 
-      <div className="mt-6 p-4 border border-dashed border-slate-400 rounded-lg">
+      <div className="mt-6 p-4 border border-dashed border-slate-400 dark:border-slate-600 rounded-lg">
         <h3 className="font-semibold text-lg mb-2">Ví dụ trực quan về Vùng Tìm kiếm</h3>
         <p>Toàn bộ hộp này được xác định là một khu vực tìm kiếm cho các công nghệ hỗ trợ.</p>
-        <div role="search" aria-label="Tìm kiếm trên trang" className="mt-2 p-4 bg-slate-100 rounded">
+        <div role="search" aria-label="Tìm kiếm trên trang" className="mt-2 p-4 bg-slate-100 dark:bg-slate-900/50 rounded">
           <label htmlFor="search-input" className="sr-only">Tìm kiếm</label>
           <input 
             type="search" 
             id="search-input"
             placeholder="Tìm kiếm trên trang này..."
-            className="w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm bg-white dark:bg-slate-800 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
           <button className="mt-2 px-4 py-2 bg-slate-600 text-white font-semibold rounded-lg shadow-md hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-400">
             Tìm kiếm
           </button>
         </div>
-        <p className="mt-2 text-sm text-slate-600">
+        <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
           Mã nguồn: <code>&lt;div role="search" aria-label="Tìm kiếm trên trang"&gt;...&lt;/div&gt;</code>
         </p>
       </div>
