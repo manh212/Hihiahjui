@@ -1,0 +1,5 @@
+{
+  "name": "Trình diễn Hỗ trợ Tiếp cận cho Trình đọc Màn hình",
+  "description": "Một ứng dụng web mẫu thể hiện các phương pháp hay nhất về khả năng tiếp cận cho người dùng trình đọc màn hình, bao gồm HTML ngữ nghĩa, thuộc tính ARIA, điều hướng bằng bàn phím và biểu mẫu có thể truy cập.",
+  "requestFramePermissions": []
+}
