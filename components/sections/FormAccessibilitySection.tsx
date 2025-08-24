@@ -51,7 +51,7 @@ const FormAccessibilitySection: React.FC<SectionProps> = ({ id }) => {
     if (/[^A-Za-z0-9]/.test(password)) score++;
 
     const strength = {
-      0: { label: '', color: 'bg-slate-200' },
+      0: { label: '', color: 'bg-slate-200 dark:bg-slate-700' },
       1: { label: 'Rất yếu', color: 'bg-red-500' },
       2: { label: 'Yếu', color: 'bg-orange-500' },
       3: { label: 'Trung bình', color: 'bg-yellow-500' },
@@ -101,11 +101,15 @@ const FormAccessibilitySection: React.FC<SectionProps> = ({ id }) => {
         name: formState.name,
         password: '***', // Don't show password
         terms: formState.terms,
-        service: new FormData(e.currentTarget).get('service'),
-        priority: new FormData(e.currentTarget).get('priority'),
     };
     setSubmittedData(JSON.stringify(data, null, 2));
     e.currentTarget.reset();
+    setFormState({
+        name: '',
+        password: { value: '', strength: { score: 0, label: '', color: 'bg-slate-200' }},
+        confirmPassword: '',
+        terms: false,
+    });
   };
   
   const handleFocusField = (ref: React.RefObject<HTMLInputElement>) => {
@@ -218,8 +222,6 @@ const FormAccessibilitySection: React.FC<SectionProps> = ({ id }) => {
           {errors.confirmPassword && <p id="confirmPassword-error" className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.confirmPassword}</p>}
         </div>
 
-        {/* Other form fields like select, radio are omitted for brevity but would exist here */}
-
         <div className="flex items-start">
           <div className="flex items-center h-5">
             <input 
@@ -246,7 +248,7 @@ const FormAccessibilitySection: React.FC<SectionProps> = ({ id }) => {
           type="submit" 
           className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
-          Gửi thông tin
+          Đăng ký
         </button>
       </form>
 

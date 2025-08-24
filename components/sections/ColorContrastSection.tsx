@@ -29,7 +29,6 @@ const getContrastRatio = (color1: string, color2: string): number => {
   return (Math.max(lum1, lum2) + 0.05) / (Math.min(lum1, lum2) + 0.05);
 };
 
-// Function to adjust color lightness
 const adjustLightness = (hex: string, percent: number): string => {
   const rgb = hexToRgb(hex);
   if (!rgb) return hex;
@@ -67,7 +66,7 @@ const ColorContrastSection: React.FC<SectionProps> = ({ id }) => {
     if (!bgRgb) return;
 
     const bgLuminance = getLuminance(bgRgb);
-    const step = bgLuminance > 0.5 ? -1 : 1; // Darken text on light bg, lighten on dark bg
+    const step = bgLuminance > 0.5 ? -1 : 1;
 
     for (let i = 0; i < 100; i++) {
         newTextColor = adjustLightness(newTextColor, step);
@@ -83,22 +82,24 @@ const ColorContrastSection: React.FC<SectionProps> = ({ id }) => {
 
   return (
     <SectionCard title="Tương phản Màu sắc" id={id}>
-      <p>Theo WCAG, tỷ lệ tương phản tối thiểu là 4.5:1 cho văn bản thường và 3:1 cho văn bản lớn.</p>
-      
+      <p>
+        Theo Nguyên tắc Tiếp cận Nội dung Web (WCAG), tỷ lệ tương phản tối thiểu là 4.5:1 cho văn bản thường và 3:1 cho văn bản lớn.
+      </p>
+
       <div className="mt-6 p-4 border border-slate-200 dark:border-slate-700 rounded-lg">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
             <div className="space-y-4">
                 <div>
                     <label htmlFor="text-color-picker" className="block text-sm font-medium mb-1">Màu chữ</label>
                     <div className="flex items-center space-x-2">
-                        <input id="text-color-picker" type="color" value={textColor} onChange={e => setTextColor(e.target.value)} className="w-10 h-10 rounded border-none cursor-pointer"/>
+                        <input id="text-color-picker" type="color" value={textColor} onChange={e => setTextColor(e.target.value)} className="w-10 h-10 rounded border-none cursor-pointer p-0"/>
                         <input type="text" value={textColor} onChange={e => setTextColor(e.target.value)} className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-800 text-sm"/>
                     </div>
                 </div>
                  <div>
                     <label htmlFor="bg-color-picker" className="block text-sm font-medium mb-1">Màu nền</label>
                     <div className="flex items-center space-x-2">
-                        <input id="bg-color-picker" type="color" value={bgColor} onChange={e => setBgColor(e.target.value)} className="w-10 h-10 rounded border-none cursor-pointer"/>
+                        <input id="bg-color-picker" type="color" value={bgColor} onChange={e => setBgColor(e.target.value)} className="w-10 h-10 rounded border-none cursor-pointer p-0"/>
                         <input type="text" value={bgColor} onChange={e => setBgColor(e.target.value)} className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-800 text-sm"/>
                     </div>
                 </div>
@@ -129,7 +130,7 @@ const ColorContrastSection: React.FC<SectionProps> = ({ id }) => {
                     </div>
                     {!normalTextResult.pass && (
                         <button onClick={suggestColor} className="mt-3 px-3 py-1.5 text-sm bg-indigo-100 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300 rounded-md font-medium hover:bg-indigo-200 dark:hover:bg-indigo-900">
-                           Gợi ý màu
+                           Gợi ý màu chữ
                         </button>
                     )}
                 </div>
